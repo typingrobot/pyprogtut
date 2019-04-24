@@ -6,8 +6,9 @@ def spam():
     print('x is', x)
 
 def run():
-    print('Calling spam')
+    print('Calling new spam')
     spam()
 
-print('Running')
-run()
+if __name__ == '__main__':
+    print('Running')
+    run()
