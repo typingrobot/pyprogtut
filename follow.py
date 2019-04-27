@@ -4,6 +4,7 @@
 
 import os
 import time
+import csv
 
 
 def follow(filename):
@@ -19,11 +20,20 @@ def follow(filename):
         yield line
 
 
-for line in follow('/var/log/auth.log'):
-    if 'opened' in line:
-        info = line.split(':')[-1].split('by')
+def parse_auth_log(lines):
+    rows = csv.reader(lines)
+    types = [str]
+    converted = ([func(val) for func, val in zip(types, row)] for row in rows)
+    return converted
+
+
+lines = follow('/var/log/auth.log')
+rows = parse_auth_log(lines)
+
+
+for row in rows:
+    if 'opened' in row[0]:
+        info = row[0].split(':')[-1].split('by')
         print('Session opened for user: {} by {}'.format(
                 info[0].split('user')[-1].strip(),
                 info[1].strip()))
-
-    print('Got:', line)
