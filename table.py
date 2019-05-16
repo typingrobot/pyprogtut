@@ -1,4 +1,5 @@
 # table.py
+import sys
 
 
 def print_table(objects, colnames):
@@ -31,6 +32,11 @@ def print_table(objects, colnames, formatter):
 
 
 class TableFormatter():
+    def __init__(self, outfile=None):
+        if outfile is None:
+            outfile = sys.stdout
+        self.outfile = outfile
+
     def headings(self, headers):
         raise NotImplementedError
 
@@ -39,15 +45,22 @@ class TableFormatter():
 
 
 class TextTableFormatter(TableFormatter):
+
+    def __init__(self, outfile=None, width=10):
+        super().__init__(outfile)
+        self.width = width
+
     def headings(self, headers):
         for header in headers:
-            print('{:>10s}'.format(header), end=' ')
-        print()
+            print('{:>{}s}'.format(header, self.width),
+                  end=' ', file=self.outfile)
+        print(file=self.outfile)
 
     def row(self, rowdata):
         for item in rowdata:
-            print('{:>10s}'.format(item), end=' ')
-        print()
+            print('{:>{}s}'.format(item, self.width),
+                  end=' ', file=self.outfile)
+        print(file=self.outfile)
 
 
 class CSVTableFormatter(TableFormatter):
@@ -72,3 +85,9 @@ class HTMLTableFormatter(TableFormatter):
         for item in rowdata:
             print('<tr>{}</tr>'.format(item), end=' ')
         print('<tr>')
+
+
+class QuotedMixin():
+    def row(self, rowdata):
+        quoted = ['"{}"'.format(d) for d in rowdata]
+        super().row(quoted)
