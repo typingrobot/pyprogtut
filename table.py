@@ -1,5 +1,6 @@
 # table.py
 import sys
+from abc import ABC, abstractmethod
 
 
 def print_table(objects, colnames):
@@ -25,6 +26,9 @@ def print_table(objects, colnames, formatter):
     from a list of objects
     '''
 
+    if not isinstance(formatter, TableFormatter):
+        raise TypeError('formatter must be a table formatter')
+
     formatter.headings(colnames)
     for obj in objects:
         rowdata = [str(getattr(obj, colname)) for colname in colnames]
@@ -47,28 +51,19 @@ class TablePrinter():
             self.formatter.row(rowdata)
 
 
-class TableFormatter():
+class TableFormatter(ABC):
     def __init__(self, outfile=None):
         if outfile is None:
             outfile = sys.stdout
         self.outfile = outfile
 
-    def print_table(self, objects, colnames):
-        '''
-        Make a nicely formatted table showing attributes
-        from a list of objects
-        '''
-
-        self.headings(colnames)
-        for obj in objects:
-            rowdata = [str(getattr(obj, colname)) for colname in colnames]
-            self.row(rowdata)
-
+    @abstractmethod
     def headings(self, headers):
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def row(self, rowdata):
-        raise NotImplementedError
+        pass
 
 
 class TextTableFormatter(TableFormatter):

@@ -27,3 +27,6 @@ def read_portfolio(filename):
             h = Holding(row[0], row[1], int(row[2]), float(row[3]))
             portfolio.append(h)
     return portfolio
+
+
+portfolio = read_portfolio('portfolio.csv')
