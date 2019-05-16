@@ -31,11 +31,38 @@ def print_table(objects, colnames, formatter):
         formatter.row(rowdata)
 
 
+class TablePrinter():
+    def __init__(self, formatter):
+        self.formatter = formatter
+
+    def print_table(self, objects, colnames):
+        '''
+        Make a nicely formatted table showing attributes
+        from a list of objects
+        '''
+
+        self.formatter.headings(colnames)
+        for obj in objects:
+            rowdata = [str(getattr(obj, colname)) for colname in colnames]
+            self.formatter.row(rowdata)
+
+
 class TableFormatter():
     def __init__(self, outfile=None):
         if outfile is None:
             outfile = sys.stdout
         self.outfile = outfile
+
+    def print_table(self, objects, colnames):
+        '''
+        Make a nicely formatted table showing attributes
+        from a list of objects
+        '''
+
+        self.headings(colnames)
+        for obj in objects:
+            rowdata = [str(getattr(obj, colname)) for colname in colnames]
+            self.row(rowdata)
 
     def headings(self, headers):
         raise NotImplementedError
