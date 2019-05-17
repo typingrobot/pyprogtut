@@ -16,6 +16,29 @@ class Holding(object):
                                                         self.shares,
                                                         self.price)
 
+    @property
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, newprice):
+        if not isinstance(newprice, float):
+            raise TypeError('expected float')
+        if newprice < 0:
+            raise ValueError(' Must be >= 0')
+        self._price = newprice
+
+    @property
+    def shares(self):
+        return self._shares
+
+    @shares.setter
+    def shares(self, newshares):
+        if not isinstance(newshares, int):
+            raise TypeError('Expecte int')
+        self._shares = newshares
+
+    @property
     def cost(self):
         # print(id(self))
         return self.shares * self.price
