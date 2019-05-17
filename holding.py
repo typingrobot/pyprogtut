@@ -35,7 +35,7 @@ class Holding(object):
     @shares.setter
     def shares(self, newshares):
         if not isinstance(newshares, int):
-            raise TypeError('Expecte int')
+            raise TypeError('Expected int')
         self._shares = newshares
 
     @property
