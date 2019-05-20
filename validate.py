@@ -39,6 +39,11 @@ class Holding():
         self.shares = shares
         self.price = price
 
+    def __setattr__(self, name, value):
+        if name not in {'name', 'date', 'shares', 'price'}:
+            raise AttributeError('No attribute {}'.format(name))
+        super().__setattr__(name, value)
+
     @property
     def cost(self):
         return self.shares * self.price

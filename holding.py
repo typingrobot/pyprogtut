@@ -51,6 +51,9 @@ class Portfolio():
     def __init__(self):
         self.holdings = []
 
+    def __getattr__(self, name):
+        return getattr(self.holdings, name)
+
     @classmethod
     def from_csv(cls, filename):
         self = cls()
